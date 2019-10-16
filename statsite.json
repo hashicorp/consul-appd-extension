@@ -1,0 +1,5 @@
+{
+  "telemetry": {
+    "statsite_address": "localhost:8125"
+  }
+}
