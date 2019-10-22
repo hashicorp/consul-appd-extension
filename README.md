@@ -1,4 +1,4 @@
-# HashiCorp Consul Monitoring Extension
+# HashiCorp Consul Monitoring Extension for AppDynamics CNS
 An AppDynamics Machine Agent add-on to report metrics from HashiCorp Consul to AppDynamics Central Nervous System (CNS).
 
 ## System Requirements
