@@ -62,11 +62,13 @@ Please visit AppDynamics Machine Agent [requirements and supported environments]
 
  10. (Optional) Enable [server visibility]:
        
-        systemctl stop appdynamics-machine-agent
-        sed -i 's/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000"/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000 -Dappdynamics.sim.enabled=true"/g' /etc/systemd/system/appdynamics-machine-agent.service
-        systemctl daemon-reload
-        systemctl start appdynamics-machine-agent
-        systemctl status appdynamics-machine-agent
+       ```
+       systemctl stop appdynamics-machine-agent
+       sed -i 's/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000"/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000 -Dappdynamics.sim.enabled=true"/g' /etc/systemd/system/appdynamics-machine-agent.service
+       systemctl daemon-reload
+       systemctl start appdynamics-machine-agent
+       systemctl status appdynamics-machine-agent
+       ```
 
 
 ## Troubleshooting
