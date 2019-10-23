@@ -30,18 +30,14 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
 
  4. Clone, compile the [statsite repo], and copy the `statsite` executable into `/opt/appdynamics/monitors/StatSite`. Follow the installation steps highlighted [here]:
  
-        cd ~ && git clone https://github.com/hashicorp/consul-appd-extension.git
-        cd statsite
+        cd ~ && wget https://github.com/statsite/statsite/archive/v0.8.0.zip
+        cd statsite-0.8.0
         apt-get update
         apt-get -y install build-essential libtool autoconf automake scons python-setuptools lsof git texlive check
-        easy_install pip
-        pip install pytest==3.4.0 
-        pip install requests==2.21.0
-        ./autogen.sh
+        ./bootstrap.sh
         ./configure
         make
-        make install
-        cp statsite /opt/appdynamics/monitors/StatSite
+        cp ./src/statsite /opt/appdynamics/monitors/StatSite
 
  5. Configure Consul agent with a [telemetry stanza] in `statsite.json` for Consul to send metrics to statsite:
 
