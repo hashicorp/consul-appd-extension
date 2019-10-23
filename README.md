@@ -1,8 +1,12 @@
 # HashiCorp Consul Monitoring Extension for AppDynamics CNS
-An AppDynamics Machine Agent add-on to report metrics from HashiCorp Consul to AppDynamics Central Nervous System (CNS).
+HashiCorp has built an AppDynamics Machine Agent extension to report metrics from HashiCorp Consul into the AppDynamics platform via the metrics browser.  The Consul metrics can then be used to create health rules, where they can be baselined and alerted on within AppDynamics.
 
 ## System Requirements
-Please visit AppDynamics Machine Agent [requirements and supported environments] for more info.
+- An AppDynamics SaaS or On-Prem controller version 4.5 or greater. 
+- AppDynamics [Machine or Server Visibility] agent including the JRE. 
+- Please visit AppDynamics Machine Agent [requirements and supported environments] for more info.
+- Applications that are using Consul to register and discover services that are also being monitored by AppDynamics using one a [language agents] as well as a [machine or server visibility agent].  
+
 
 ## Installation
 
@@ -10,7 +14,7 @@ Please visit AppDynamics Machine Agent [requirements and supported environments]
 
         sudo su
         mkdir -p /opt/appdynamics
-        zip ./machineagent-bundle-64bit-linux-4.5.15.2316.zip -d /opt/appdynamics
+        unzip ./machineagent-bundle-64bit-linux-4.5.15.2316.zip -d /opt/appdynamics
         cp /opt/appdynamics/etc/systemd/system/appdynamics-machine-agent.service /etc/systemd/system/appdynamics-machine-agent.service
         cp -f ./controller-info.xml /opt/appdynamics/conf
 
@@ -60,15 +64,12 @@ Please visit AppDynamics Machine Agent [requirements and supported environments]
        
         tail -f /opt/appdynamics/logs/machine-agent.log
 
- 10. (Optional) Enable [server visibility]:
+ 10. (Optional) Enable [server visibility]. Edit `/opt/appd/conf/controller-info.xml` and enable it, `<sim-enabled>true</sim-enabled>`:
        
-       ```
-       systemctl stop appdynamics-machine-agent
-       sed -i 's/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000"/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000 -Dappdynamics.sim.enabled=true"/g' /etc/systemd/system/appdynamics-machine-agent.service
-       systemctl daemon-reload
-       systemctl start appdynamics-machine-agent
-       systemctl status appdynamics-machine-agent
-       ```
+        systemctl stop appdynamics-machine-agent
+        vi /opt/appdynamics/controller-info.xml
+        systemctl start appdynamics-machine-agent
+        systemctl status consul
 
 
 ## Troubleshooting
@@ -85,6 +86,9 @@ This repository provides custom dashboards to get you started on monitoring Cons
   
 
 [requirements and supported environments]: https://docs.appdynamics.com/display/PRO45/Standalone+Machine+Agent+Requirements+and+Supported+Environments
+[Machine or Server Visibility]: https://docs.appdynamics.com/display/PRO45/Infrastructure+Visibility
+[language agents]: https://docs.appdynamics.com/display/PRO45/Install+App+Server+Agents
+[machine or server visibility agent]: https://docs.appdynamics.com/display/PRO45/Infrastructure+Visibility
 [machine agent bundle]: https://download.appdynamics.com/download/#version=&apm=machine&os=&platform_admin_os=&appdynamics_cluster_os=&events=&eum=&page=1
 [guide]: https://docs.appdynamics.com/display/PRO45/Linux+Install+Using+ZIP+with+Bundled+JRE
 [repo]: https://github.com/hashicorp/consul-appd-extension
