@@ -101,5 +101,5 @@ This repository provides two custom dashboards to get you started on monitoring 
 [knowledge base]: https://community.appdynamics.com/t5/Knowledge-Base/tkb-p/knowledge-base
 [AppDynamics support]: https://www.appdynamics.com/support/
 [HashiCorp support]: https://support.hashicorp.com/hc/en-us
-[dashboards]: tree/master/dashboards
+[dashboards]: https://github.com/hashicorp/consul-appd-extension/tree/master/dashboards
 
