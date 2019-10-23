@@ -5,7 +5,9 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
 - An AppDynamics SaaS or On-Prem controller version 4.5 or greater. 
 - AppDynamics [Machine or Server Visibility] agent including the JRE. 
 - Please visit AppDynamics Machine Agent [requirements and supported environments] for more info.
-- Applications that are using Consul to register and discover services that are also being monitored by AppDynamics using one a [language agents] as well as a [machine or server visibility agent].  
+- A Consul cluster that we will install the AppDynamics Machine Agent on each node. 
+- Applications that are using Consul to register and discover services that are also being monitored by AppDynamics using one a [language agents] as well as a [machine or server visibility agent].
+- Statsite will be required to be installed on each node of the Consul cluster which will be covered in the instructions below. 
 
 
 ## Installation
@@ -22,13 +24,13 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
  
          sed -i 's/#Environment="JAVA_OPTS=-D<sys-property1>=<value1> -D<sys-property2>=<value2>"/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000"/g' /etc/systemd/system/appdynamics-machine-agent.service
  
- 3. Clone this [repo] and copy contents of folder `statsite` into `/opt/appdynamics/monitors/StatSite`:
+ 3. To install this extension, clone this [repo] and copy contents of folder `statsite` into `/opt/appdynamics/monitors/StatSite`:
  
         mkdir -p /opt/appdynamics/monitors/StatSite
         git clone https://github.com/hashicorp/consul-appd-extension.git
         cp ./consul-appd-extension/statsite/* /opt/appdynamics/monitors/StatSite
 
- 4. Clone, compile the [statsite repo], and copy the `statsite` executable into `/opt/appdynamics/monitors/StatSite`. Follow the installation steps highlighted [here]:
+ 4. Now you need to compile the [statsite], and copy the `statsite` executable into `/opt/appdynamics/monitors/StatSite`. Follow the installation steps highlighted [here]:
  
         cd ~ && wget https://github.com/statsite/statsite/archive/v0.8.0.zip
         cd statsite-0.8.0
@@ -39,15 +41,15 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
         make
         cp ./src/statsite /opt/appdynamics/monitors/StatSite
 
- 5. Configure Consul agent with a [telemetry stanza] in `statsite.json` for Consul to send metrics to statsite:
+ 5. Configure Consul agent with a [telemetry stanza] in `consul-statsite.json` for Consul to send metrics to statsite:
 
-        cp ./consul-appd-extension/statsite.json /etc/consul.d/
+        cp ./consul-appd-extension/connsul-statsite.json /etc/consul.d/
 
  6. Restart Consul agent:
 
         systemctl restart consul
 
- 7. Start the machine agent:
+ 7. Start the AppDynamics machine agent:
  
         systemctl start appdynamics-machine-agent
 
@@ -56,7 +58,7 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
         systemctl status appdynamics-machine-agent
         systemctl status consul
 
- 9. Verify AppDynamics Machine Agent logs:
+ 9. Verify AppDynamics Machine Agent started properly by looking at the Agent logs:
        
         tail -f /opt/appdynamics/logs/machine-agent.log
 
@@ -71,13 +73,13 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
 
 
 ## Troubleshooting
-Please visit AppDynamics [knowledge base] for troubleshooting articles or contact AppDynamics [support] for help.
+Please visit AppDynamics [knowledge base] for troubleshooting articles or contact [AppDynamics support] for help with your AppDynamics environment. Contact [HashiCorp support] for help with the machine agent extension.
 
 ## Finding metrics
-All metrics reported by this extension will be found in the Metric Browser under `Application Infrastructure Performance|Tier1|Custom Metrics|statsd|consul`. For details of what each metric means, consult the [Consul Telemetry] guide.
+All metrics reported by this extension will be found in the Metric Browser under `Performance|Consul|Custom Metrics|statsd|consul` or `Performance|Consul|Custom Metrics|statsd|envoy`. For details of what each metric means, consult the [Consul Telemetry] guide.
 
 ## Custom dashboards
-This repository provides custom dashboards to get you started on monitoring Consul in the `dashboards` folder. To import dasboards:
+This repository provides two custom dashboards to get you started on monitoring Consul in the `dashboards` folder. They are located in the [dashboards] folder. To import the dasboards:
 
  1. Log into your AppDynamics controller. Select the **Dashboards & Reports** tab > **Dashboards** > **Import**.
  2. Upload the  `.json` dashboard file.
@@ -94,8 +96,10 @@ This repository provides custom dashboards to get you started on monitoring Cons
 [telemetry stanza]: https://www.consul.io/docs/agent/options.html#telemetry
 [server visibility]: https://docs.appdynamics.com/display/PRO45/Enable+Server+Visibility
 [consul telemetry]: https://www.consul.io/docs/agent/telemetry.html
-[statsite repo]: https://github.com/statsite/statsite
+[statsite]: https://github.com/statsite/statsite
 [here]: https://github.com/statsite/statsite/blob/master/INSTALL.md
 [knowledge base]: https://community.appdynamics.com/t5/Knowledge-Base/tkb-p/knowledge-base
-[support]: https://www.appdynamics.com/support/
+[AppDynamics support]: https://www.appdynamics.com/support/
+[HashiCorp support]: https://support.hashicorp.com/hc/en-us
+[dashboards]: tree/master/dashboards
 
