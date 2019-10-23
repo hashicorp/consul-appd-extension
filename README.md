@@ -66,10 +66,12 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
 
  10. (Optional) Enable [server visibility]. Edit `/opt/appd/conf/controller-info.xml` and enable it, `<sim-enabled>true</sim-enabled>`:
        
-        systemctl stop appdynamics-machine-agent
-        vi /opt/appdynamics/controller-info.xml
-        systemctl start appdynamics-machine-agent
-        systemctl status consul
+       ```
+       systemctl stop appdynamics-machine-agent
+       vi /opt/appdynamics/controller-info.xml
+       systemctl start appdynamics-machine-agent
+       systemctl status consul
+       ```
 
 
 ## Troubleshooting
