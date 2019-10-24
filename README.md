@@ -12,25 +12,25 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
 
 ## Installation
 
- 1. Download the AppDynamics [machine agent bundle]. As `root` or super user, unzip and configure it for [standalone mode] in `/opt/appdynamics`. See this [guide] to configure it. You will need to obtain your AppDynamics Controller access information and configure it in `controller-info.xml` file:
+ 1. Download the AppDynamics [machine agent bundle]. As `root` or super user, unzip and configure it for [standalone mode] in `/opt/appdynamics/machine-agent`. See this [guide] to configure it. You will need to obtain your AppDynamics Controller access information and configure it in `controller-info.xml` file:
 
         sudo su
-        mkdir -p /opt/appdynamics
-        unzip ./machineagent-bundle-64bit-linux-4.5.15.2316.zip -d /opt/appdynamics
-        cp /opt/appdynamics/etc/systemd/system/appdynamics-machine-agent.service /etc/systemd/system/appdynamics-machine-agent.service
-        cp -f ./controller-info.xml /opt/appdynamics/conf
+        mkdir -p /opt/appdynamics/machine-agent
+        unzip ./machineagent-bundle-64bit-linux-4.5.15.2316.zip -d /opt/appdynamics/machine-agent
+        cp /opt/appdynamics/machine-agent/etc/systemd/system/appdynamics-machine-agent.service /etc/systemd/system/appdynamics-machine-agent.service
+        cp -f ./controller-info.xml /opt/appdynamics/machine-agent/conf
 
  2. It is recommended to increase the value of `maxMetrics` so that data doesn't get truncated. Add Java Options in AppDynamics agent service definition to increase the value of `maxMetrics`.
  
          sed -i 's/#Environment="JAVA_OPTS=-D<sys-property1>=<value1> -D<sys-property2>=<value2>"/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000"/g' /etc/systemd/system/appdynamics-machine-agent.service
  
- 3. To install this extension, clone this [repo] and copy contents of folder `statsite` into `/opt/appdynamics/monitors/StatSite`:
+ 3. To install this extension, clone this [repo] and copy contents of folder `statsite` into `/opt/appdynamics/machine-agent/monitors/StatSite`:
  
-        mkdir -p /opt/appdynamics/monitors/StatSite
+        mkdir -p /opt/appdynamics/machine-agent/monitors/StatSite
         git clone https://github.com/hashicorp/consul-appd-extension.git
-        cp ./consul-appd-extension/statsite/* /opt/appdynamics/monitors/StatSite
+        cp ./consul-appd-extension/statsite/* /opt/appdynamics/machine-agent/monitors/StatSite
 
- 4. Now you need to compile the [statsite], and copy the `statsite` executable into `/opt/appdynamics/monitors/StatSite`. Follow the installation steps highlighted [here]:
+ 4. Now you need to compile the [statsite], and copy the `statsite` executable into `/opt/appdynamics/machine-agent/monitors/StatSite`. Follow the installation steps highlighted [here]:
  
         cd ~ && wget https://github.com/statsite/statsite/archive/v0.8.0.zip
         unzip v0.8.0.zip && cd statsite-0.8.0
@@ -39,11 +39,11 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
         ./bootstrap.sh
         ./configure
         make
-        cp ./src/statsite /opt/appdynamics/monitors/StatSite
+        cp ./src/statsite /opt/appdynamics/machine-agent/monitors/StatSite
 
  5. Configure Consul agent with a [telemetry stanza] in `consul-statsite.json` for Consul to send metrics to statsite:
 
-        cp ./consul-appd-extension/connsul-statsite.json /etc/consul.d/
+        cp ~/consul-appd-extension/connsul-statsite.json /etc/consul.d/
 
  6. Restart Consul agent:
 
@@ -60,13 +60,13 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
 
  9. Verify AppDynamics Machine Agent started properly by looking at the Agent logs:
        
-        tail -f /opt/appdynamics/logs/machine-agent.log
+        tail -f /opt/appdynamics/machine-agent/logs/machine-agent.log
 
- 10. (Optional) Enable [server visibility]. Edit `/opt/appd/conf/controller-info.xml` and enable it, `<sim-enabled>true</sim-enabled>`:
+ 10. (Optional) Enable [server visibility]. Edit `controller-info.xml` and enable it, `<sim-enabled>true</sim-enabled>`:
        
        ```
        systemctl stop appdynamics-machine-agent
-       vi /opt/appdynamics/controller-info.xml
+       vi /opt/appdynamics/machine-agent/controller-info.xml
        systemctl start appdynamics-machine-agent
        systemctl status consul
        ```
