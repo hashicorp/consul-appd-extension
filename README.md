@@ -12,7 +12,7 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
 
 ## Installation
 
- 1. Download the AppDynamics [machine agent bundle]. As `root` or super user, unzip and configure it for [standalone mode] in `/opt/appdynamics`. See this [guide]. You will need to obtain your AppDynamics Controller access information and configure it in `controller-info.xml` file:
+ 1. Download the AppDynamics [machine agent bundle]. As `root` or super user, unzip and configure it for [standalone mode] in `/opt/appdynamics`. See this [guide] to configure it. You will need to obtain your AppDynamics Controller access information and configure it in `controller-info.xml` file:
 
         sudo su
         mkdir -p /opt/appdynamics
@@ -33,7 +33,7 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
  4. Now you need to compile the [statsite], and copy the `statsite` executable into `/opt/appdynamics/monitors/StatSite`. Follow the installation steps highlighted [here]:
  
         cd ~ && wget https://github.com/statsite/statsite/archive/v0.8.0.zip
-        cd statsite-0.8.0
+        unzip v0.8.0.zip && cd statsite-0.8.0
         apt-get update
         apt-get -y install build-essential libtool autoconf automake scons python-setuptools lsof git texlive check
         ./bootstrap.sh
