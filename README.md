@@ -43,7 +43,7 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
 
  5. Configure Consul agent with a [telemetry stanza] in `consul-statsite.json` for Consul to send metrics to statsite:
 
-        cp ~/consul-appd-extension/connsul-statsite.json /etc/consul.d/
+        cp ~/consul-appd-extension/consul-statsite.json /etc/consul.d/
 
  6. Restart Consul agent:
 
