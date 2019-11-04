@@ -83,7 +83,12 @@ This repository provides two custom dashboards to get you started on monitoring 
 
  1. Log into your AppDynamics controller. Select the **Dashboards & Reports** tab > **Dashboards** > **Import**.
  2. Upload the  `.json` dashboard file.
-  
+
+## Custom Health Rules
+AppDynamics CNS provides the ability to customize health rules, the policy statements that define triggers. Visit this [health rule guide] for more info.
+
+
+
 
 [requirements and supported environments]: https://docs.appdynamics.com/display/PRO45/Standalone+Machine+Agent+Requirements+and+Supported+Environments
 [Machine or Server Visibility]: https://docs.appdynamics.com/display/PRO45/Infrastructure+Visibility
@@ -102,4 +107,5 @@ This repository provides two custom dashboards to get you started on monitoring 
 [AppDynamics support]: https://www.appdynamics.com/support/
 [HashiCorp support]: https://support.hashicorp.com/hc/en-us
 [dashboards]: https://github.com/hashicorp/consul-appd-extension/tree/master/dashboards
+[health rule guide]: https://docs.appdynamics.com/display/PRO45/Health+Rules
 
