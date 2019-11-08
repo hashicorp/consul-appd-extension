@@ -1,18 +1,17 @@
 # HashiCorp Consul Monitoring Extension for AppDynamics CNS
-HashiCorp has built an AppDynamics Machine Agent extension to report metrics from HashiCorp Consul into the AppDynamics platform via the metrics browser.  The Consul metrics can then be used to create health rules, where they can be baselined and alerted on within AppDynamics.
+HashiCorp has built an AppDynamics Machine Agent extension to report metrics from HashiCorp Consul into the AppDynamics platform via the metrics browser. The Consul metrics can then be used to create dashboards and health rules, where they can be visualized, baselined and alerted on within AppDynamics.
 
 ## System Requirements
 - An AppDynamics SaaS or On-Prem controller version 4.5 or greater. 
 - AppDynamics [Machine or Server Visibility] agent including the JRE. 
 - Please visit AppDynamics Machine Agent [requirements and supported environments] for more info.
-- A Consul cluster that we will install the AppDynamics Machine Agent on each node. 
+- A Consul cluster that we will install the AppDynamics Machine Agent and extension on (each node) to report metrics. . 
 - Applications that are using Consul to register and discover services that are also being monitored by AppDynamics using one a [language agents] as well as a [machine or server visibility agent].
-- Statsite will be required to be installed on each node of the Consul cluster which will be covered in the instructions below. 
-
+- Statsite (which is a statsd clone) will be required to be installed on each node of the Consul cluster which will be covered in the instructions below. 
 
 ## Installation
 
- 1. Download the AppDynamics [machine agent bundle]. As `root` or super user, unzip and configure it for [standalone mode] in `/opt/appdynamics/machine-agent`. See this [guide] to configure it. You will need to obtain your AppDynamics Controller access information and configure it in `controller-info.xml` file:
+ 1. Download the AppDynamics [machine agent bundle]. As `root` or super user, unzip and configure it for [standalone mode] in `/opt/appdynamics/machine-agent`. See this [guide] to configure it. You will need to obtain your AppDynamics Controller access information and configure it in `controller-info.xml` file before you begin the steps below.
 
         sudo su
         mkdir -p /opt/appdynamics/machine-agent
@@ -20,7 +19,7 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
         cp /opt/appdynamics/machine-agent/etc/systemd/system/appdynamics-machine-agent.service /etc/systemd/system/appdynamics-machine-agent.service
         cp -f ./controller-info.xml /opt/appdynamics/machine-agent/conf
 
- 2. It is recommended to increase the value of `maxMetrics` so that data doesn't get truncated. Add Java Options in AppDynamics agent service definition to increase the value of `maxMetrics`.
+ 2. It is highly recommended to increase the value of `maxMetrics` so that data doesn't get truncated. Add Java Options in AppDynamics agent service definition to increase the value of `maxMetrics`.
  
          sed -i 's/#Environment="JAVA_OPTS=-D<sys-property1>=<value1> -D<sys-property2>=<value2>"/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000"/g' /etc/systemd/system/appdynamics-machine-agent.service
  
@@ -62,7 +61,7 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
        
         tail -f /opt/appdynamics/machine-agent/logs/machine-agent.log
 
- 10. (Optional) Enable [server visibility]. Edit `controller-info.xml` and enable it, `<sim-enabled>true</sim-enabled>`:
+ 10. (Optional) You can enable [server visibility] on the machine agent which requires the appropriate AppDynamics license, but is supported by this integration. Edit `controller-info.xml` and set the flag to `true` to enable it, `<sim-enabled>true</sim-enabled>`:
        
        ```
        systemctl stop appdynamics-machine-agent
@@ -71,12 +70,11 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
        systemctl status consul
        ```
 
-
 ## Troubleshooting
 Please visit AppDynamics [knowledge base] for troubleshooting articles or contact [AppDynamics support] for help with your AppDynamics environment. Contact [HashiCorp support] for help with the machine agent extension.
 
 ## Finding metrics
-All metrics reported by this extension will be found in the Metric Browser under `Performance|Consul|Custom Metrics|statsd|consul` or `Performance|Consul|Custom Metrics|statsd|envoy`. For details of what each metric means, consult the [Consul Telemetry] guide.
+All metrics reported by this extension will be found in the Metric Browser under `Application Infrastructure Performance|Consul|Custom Metrics|statsd|consul` or `Application Infrastructure Performance|Consul|Custom Metrics|statsd|envoy`. For details of what each metric means, consult the [Consul Telemetry] guide.
 
 ## Custom dashboards
 This repository provides two custom dashboards to get you started on monitoring Consul in the `dashboards` folder. They are located in the [dashboards] folder. To import the dasboards:
@@ -85,7 +83,7 @@ This repository provides two custom dashboards to get you started on monitoring 
  2. Upload the  `.json` dashboard file.
 
 ## Custom Health Rules
-AppDynamics CNS provides the ability to customize health rules, the policy statements that define triggers. Visit this [health rule guide] for more info.
+AppDynamics CNS provides the ability to customize health rules, the policy statements that define triggers. Today health rules for Consul are created against the applications that are using its service discovery and service mesh so that the metrics for the application as well as Consul can be seen against particular applications in AppDynamics. Visit this [health rule guide] for more info.
 
 
 
