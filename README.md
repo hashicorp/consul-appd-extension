@@ -5,9 +5,9 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
 - An AppDynamics SaaS or On-Prem controller version 4.5 or greater. 
 - AppDynamics [Machine or Server Visibility] agent including the JRE. 
 - Please visit AppDynamics Machine Agent [requirements and supported environments] for more info.
-- A Consul cluster that we will install the AppDynamics Machine Agent and extension on (each node) to report metrics. . 
-- Applications that are using Consul to register and discover services that are also being monitored by AppDynamics using one a [language agents] as well as a [machine or server visibility agent].
-- Statsite (which is a statsd clone) will be required to be installed on each node of the Consul cluster which will be covered in the instructions below. 
+- A Consul cluster that we will install the AppDynamics Machine Agent and extension on (each node) to report metrics. 
+- Applications that are using Consul to register and discover services that are also being monitored by AppDynamics using one a [language agent] as well as a [machine or server visibility agent].
+- Statsite (which is a metrics aggregator like statsd) will be required to be installed on each node of the Consul cluster which will be covered in the instructions below. 
 
 ## Installation
 
@@ -74,13 +74,15 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
 Please visit AppDynamics [knowledge base] for troubleshooting articles or contact [AppDynamics support] for help with your AppDynamics environment. Contact [HashiCorp support] for help with the machine agent extension.
 
 ## Finding metrics
-All metrics reported by this extension will be found in the Metric Browser under `Application Infrastructure Performance|Consul|Custom Metrics|statsd|consul` or `Application Infrastructure Performance|Consul|Custom Metrics|statsd|envoy`. For details of what each metric means, consult the [Consul Telemetry] guide.
+All metrics reported by this extension will be found in the Metric Browser (Controller > Applications > Application > Metric Browser) under `Application Infrastructure Performance|Consul|Custom Metrics|statsd|consul` or `Application Infrastructure Performance|Consul|Custom Metrics|statsd|envoy`. For details of what each metric means, consult the [Consul Telemetry] guide.
 
 ## Custom dashboards
 This repository provides two custom dashboards to get you started on monitoring Consul in the `dashboards` folder. They are located in the [dashboards] folder. To import the dasboards:
 
  1. Log into your AppDynamics controller. Select the **Dashboards & Reports** tab > **Dashboards** > **Import**.
  2. Upload the  `.json` dashboard file.
+
+Note: You will need to change the value for the key `applicationName` within the templates to macth your application name.
 
 ## Custom Health Rules
 AppDynamics CNS provides the ability to customize health rules, the policy statements that define triggers. Today health rules for Consul are created against the applications that are using its service discovery and service mesh so that the metrics for the application as well as Consul can be seen against particular applications in AppDynamics. Visit this [health rule guide] for more info.
@@ -90,7 +92,7 @@ AppDynamics CNS provides the ability to customize health rules, the policy state
 
 [requirements and supported environments]: https://docs.appdynamics.com/display/PRO45/Standalone+Machine+Agent+Requirements+and+Supported+Environments
 [Machine or Server Visibility]: https://docs.appdynamics.com/display/PRO45/Infrastructure+Visibility
-[language agents]: https://docs.appdynamics.com/display/PRO45/Install+App+Server+Agents
+[language agent]: https://docs.appdynamics.com/display/PRO45/Install+App+Server+Agents
 [machine or server visibility agent]: https://docs.appdynamics.com/display/PRO45/Infrastructure+Visibility
 [machine agent bundle]: https://download.appdynamics.com/download/#version=&apm=machine&os=&platform_admin_os=&appdynamics_cluster_os=&events=&eum=&page=1
 [guide]: https://docs.appdynamics.com/display/PRO45/Linux+Install+Using+ZIP+with+Bundled+JRE
