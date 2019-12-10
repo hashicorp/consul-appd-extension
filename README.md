@@ -17,24 +17,41 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
         mkdir -p /opt/appdynamics/machine-agent
         unzip ./machineagent-bundle-64bit-linux-4.5.15.2316.zip -d /opt/appdynamics/machine-agent
         cp /opt/appdynamics/machine-agent/etc/systemd/system/appdynamics-machine-agent.service /etc/systemd/system/appdynamics-machine-agent.service
-        cp -f ./controller-info.xml /opt/appdynamics/machine-agent/conf
+        cd /opt/appdynamics/machine-agent/conf
+        vi controller-info.xml
+
+       > **NOTE:** This requires editing the controller file `controller-info.xml`.
 
  2. It is highly recommended to increase the value of `maxMetrics` so that data doesn't get truncated. Add Java Options in AppDynamics agent service definition to increase the value of `maxMetrics`.
  
          sed -i 's/#Environment="JAVA_OPTS=-D<sys-property1>=<value1> -D<sys-property2>=<value2>"/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000"/g' /etc/systemd/system/appdynamics-machine-agent.service
  
- 3. To install this extension, clone this [repo] and copy contents of folder `statsite` into `/opt/appdynamics/machine-agent/monitors/StatSite`:
+ 3. To install this extension, clone this [consul-appd-extension repo] and copy contents of folder `statsite` into `/opt/appdynamics/machine-agent/monitors/StatSite`:
  
         mkdir -p /opt/appdynamics/machine-agent/monitors/StatSite
         git clone https://github.com/hashicorp/consul-appd-extension.git
         cp ./consul-appd-extension/statsite/* /opt/appdynamics/machine-agent/monitors/StatSite
 
  4. Now you need to compile the [statsite], and copy the `statsite` executable into `/opt/appdynamics/machine-agent/monitors/StatSite`. Follow the installation steps highlighted [here]:
+       
+       > For linux Debian based OS:
  
         cd ~ && wget https://github.com/statsite/statsite/archive/v0.8.0.zip
         unzip v0.8.0.zip && cd statsite-0.8.0
         apt-get update
         apt-get -y install build-essential libtool autoconf automake scons python-setuptools lsof git texlive check
+        ./bootstrap.sh
+        ./configure
+        make
+        cp ./src/statsite /opt/appdynamics/machine-agent/monitors/StatSite
+
+       > For linux Redhat based OS:
+ 
+        cd ~ && wget https://github.com/statsite/statsite/archive/v0.8.0.zip
+        unzip v0.8.0.zip && cd statsite-0.8.0
+        yum update
+        yum groupinstall -y 'Development Tools'
+        yum install -y install libtool autoconf automake scons python-setuptools lsof git texlive check
         ./bootstrap.sh
         ./configure
         make
@@ -96,7 +113,7 @@ AppDynamics CNS provides the ability to customize health rules, the policy state
 [machine or server visibility agent]: https://docs.appdynamics.com/display/PRO45/Infrastructure+Visibility
 [machine agent bundle]: https://download.appdynamics.com/download/#version=&apm=machine&os=&platform_admin_os=&appdynamics_cluster_os=&events=&eum=&page=1
 [guide]: https://docs.appdynamics.com/display/PRO45/Linux+Install+Using+ZIP+with+Bundled+JRE
-[repo]: https://github.com/hashicorp/consul-appd-extension
+[consul-appd-extension repo]: https://github.com/hashicorp/consul-appd-extension
 [standalone mode]: https://docs.appdynamics.com/display/PRO45/Configure+the+Standalone+Machine+Agent
 [telemetry stanza]: https://www.consul.io/docs/agent/options.html#telemetry
 [server visibility]: https://docs.appdynamics.com/display/PRO45/Enable+Server+Visibility
