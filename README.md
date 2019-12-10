@@ -26,13 +26,13 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
  
          sed -i 's/#Environment="JAVA_OPTS=-D<sys-property1>=<value1> -D<sys-property2>=<value2>"/Environment="JAVA_OPTS=-Dappdynamics.agent.maxMetrics=10000"/g' /etc/systemd/system/appdynamics-machine-agent.service
  
- 3. To install this extension, clone this [consul-appd-extension repo] and copy contents of folder `statsite` into `/opt/appdynamics/machine-agent/monitors/StatSite`:
+ 3. To install this extension, clone this [consul-appd-extension repo] and copy the contents of folder `statsite` into `/opt/appdynamics/machine-agent/monitors/StatSite`:
  
         mkdir -p /opt/appdynamics/machine-agent/monitors/StatSite
         git clone https://github.com/hashicorp/consul-appd-extension.git
         cp ./consul-appd-extension/statsite/* /opt/appdynamics/machine-agent/monitors/StatSite
 
- 4. Now you need to compile the [statsite], and copy the `statsite` executable into `/opt/appdynamics/machine-agent/monitors/StatSite`. Follow the installation steps highlighted [here]:
+ 4. Now you need to compile [statsite] and copy the `statsite` executable into `/opt/appdynamics/machine-agent/monitors/StatSite`. Follow the installation steps highlighted [here]:
        
        > For linux Debian based OS:
  
@@ -95,12 +95,12 @@ Please visit AppDynamics [knowledge base] for troubleshooting articles or contac
 All metrics reported by this extension will be found in the Metric Browser (Controller > Applications > Application > Metric Browser) under `Application Infrastructure Performance|Consul|Custom Metrics|statsd|consul` or `Application Infrastructure Performance|Consul|Custom Metrics|statsd|envoy`. For details of what each metric means, consult the [Consul Telemetry] guide.
 
 ## Custom dashboards
-This repository provides two custom dashboards to get you started on monitoring Consul in the `dashboards` folder. They are located in the [dashboards] folder. To import the dasboards:
+This repository provides two custom dashboards to get you started on monitoring Consul. They are located in the [dashboards] folder. To import the dashboards:
+
+> **NOTE:** You will need to change the value for the key `applicationName` within the templates to match your application name.
 
  1. Log into your AppDynamics controller. Select the **Dashboards & Reports** tab > **Dashboards** > **Import**.
  2. Upload the  `.json` dashboard file.
-
-Note: You will need to change the value for the key `applicationName` within the templates to macth your application name.
 
 ## Custom Health Rules
 AppDynamics CNS provides the ability to customize health rules, the policy statements that define triggers. Today health rules for Consul are created against the applications that are using its service discovery and service mesh so that the metrics for the application as well as Consul can be seen against particular applications in AppDynamics. Visit this [health rule guide] for more info.
