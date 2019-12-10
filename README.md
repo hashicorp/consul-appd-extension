@@ -86,6 +86,7 @@ HashiCorp has built an AppDynamics Machine Agent extension to report metrics fro
        systemctl start appdynamics-machine-agent
        systemctl status consul
        ```
+       > **NOTE:** This requires editing the controller file `controller-info.xml`.
 
 ## Troubleshooting
 Please visit AppDynamics [knowledge base] for troubleshooting articles or contact [AppDynamics support] for help with your AppDynamics environment. Contact [HashiCorp support] for help with the machine agent extension.
