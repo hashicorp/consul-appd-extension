@@ -1,3 +1,8 @@
+<!--
+ Copyright (c) HashiCorp, Inc.
+ SPDX-License-Identifier: MPL-2.0
+-->
+
 <monitor>
     <name>StatSite</name>
     <type>managed</type>
